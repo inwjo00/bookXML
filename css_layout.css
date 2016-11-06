@@ -1,0 +1,16 @@
+* { margin: 0; padding: 0; }
+#all{ width:100%; height:100%; margin:0px auto; position:relative; }
+#header{ background-color:#CCFFFF; height:150px; padding:8px; }
+#content{ background-color:#fff; height:100; padding:8px; width:1200px; position:absolute; left:300px;}
+ul {list-style: none;padding: 0px;margin: 0px;}
+  ul li {display: block;position: relative;float: left;border:1px solid #000}
+  li ul {display: none;}
+  ul li a {display: block;background: #fff;padding: 5px 10px 5px 10px;text-decoration: none;
+           white-space: nowrap;color: #fff;}
+  ul li a:hover {background: #00ffff;}
+  li:hover ul {display: block; position: absolute;}
+  li:hover li {float: none;}
+  li:hover a {background: #00ffff;}
+  li:hover li a:hover {background: #000;}
+ #drop-nav li ul li {border-top: 0px;}
+ 
