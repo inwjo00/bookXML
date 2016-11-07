@@ -85,6 +85,11 @@ BODY { font-size: 11pt; font-family: Arial, Helvetica, sans-serif; }
 					<INPUT type="text" name="book_name" size="50" maxlength="100"><INPUT action="search.php" type="submit" name="submit_search" value="Submit"> </p>
 				<br>
 			</form>
+			<form method="POST">
+				<p>Pricebath : 
+					<INPUT type="text" name="pricebath" size="50" maxlength="100"><INPUT action="search.php" type="submit" name="submit_price" value="Submit"> </p>
+				<br>
+			</form>
 			<form action="WebServiceClientAdd.php">
     			<input type="submit" value="Add movies" />
 			</form>
@@ -100,6 +105,14 @@ BODY { font-size: 11pt; font-family: Arial, Helvetica, sans-serif; }
      <div id="content">
           <?php
           	$query_age = (isset($_POST['submit_search']) ? $_POST['submit_search'] : null);
+			  	if($query_age == "Submit") {
+					$book_name=$_POST['book_name'];
+    			    $client = new nusoap_client("http://localhost/book/WebServiceServer.php?wsdl",true); 
+        			$params = array("book_name"=>$book_name);
+       				$data = $client->call("find_book",$params); 
+       				echo $data;
+    			}
+    		$query_age1 = (isset($_POST['submit_search']) ? $_POST['submit_search'] : null);
 			  	if($query_age == "Submit") {
 					$book_name=$_POST['book_name'];
     			    $client = new nusoap_client("http://localhost/book/WebServiceServer.php?wsdl",true); 

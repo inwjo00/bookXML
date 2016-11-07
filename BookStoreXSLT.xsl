@@ -14,6 +14,8 @@
         <th style="text-align:left">Type</th>
         <th style="text-align:left">Language</th>
         <th style="text-align:left">Price</th>
+        <th style="text-align:left">Thick</th>
+        <th style="text-align:left">PriceBath</th>
       </tr>
 
       <xsl:for-each select="bookstore/book">
@@ -25,6 +27,8 @@
         <td><xsl:value-of select="type"/></td>
         <td><xsl:value-of select="language"/></td>
         <td><xsl:value-of select="price"/></td>
+        <td><xsl:value-of select="thick"/></td>
+        <td><xsl:value-of select="pricebath"/></td>
       </tr>
       </xsl:for-each>
     </table>

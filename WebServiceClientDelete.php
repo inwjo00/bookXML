@@ -1,8 +1,18 @@
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="form.css"/>
+<link rel="stylesheet" type="text/css" href="button.css"/>
 <title>Client SOAP</title>
+<style type=text/css>
+		
+
+		
+	    font, td { font-family: Arial, Helvetica, sans-serif; font-size: 8pt;  font-style: italic; } 
+		
+	
+</style>
+
 </head>
-<body>
 <?php
 	// FOR DISABLE ERROR INPUT NOTICE
 	error_reporting( error_reporting() & ~E_NOTICE );
@@ -27,9 +37,6 @@
 	<INPUT type="text" name="mark_name" size="50" maxlength="100"></p>
 	<INPUT type="submit" name="submit_delete" value="Submit">
 	<br>
-</form>
-<form action="client.php">
-    <input type="submit" value="cancle" />
 </form>
 <!-- DELETE SERVICE -->
 

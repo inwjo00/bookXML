@@ -1,51 +1,45 @@
 <?php
-		require("lib/nusoap.php");
-		 
-		//Create a new soap server
-		$server = new soap_server();
-
-		//Define our namespace
-		// $namespace = "http://localhost/nusoap/index.php";
-		// $server->wsdl->schemaTargetNamespace = $namespace;
-		 
-		//Configure our WSDL
-		$server->configureWSDL("HelloWorld");
-		 
-		// Register our method and argument parameters
-        $varname = array(
-                   'strName' => "xsd:string",
-				   'strEmail' => "xsd:string"
-        );
-        $server->register(
-			'HelloWorld',
-			$varname,
-			array('return' => 'xsd:string')
-			);
-        function HelloWorld($strName,$strEmail) {
-			return "Hello, World! $strName, Your email: $strEmail";
-		}
-
-		// Register Search Function
-		$server->register(
-			'find_book',
-			array("book_name"=>'xsd:string'),
-			//array("return"=>"tns:ArrayOfString")
-			array("return"=>'xsd:string')
-			);
-		function find_book($book_name) {
-			$xmlStr=file_get_contents('BookStore.xml'); 
-			$xml=new SimpleXMLElement($xmlStr);
-			$book=$xml->xpath("child::*");
-			$result="";
-			for($i=0;$i<sizeof($book);$i++){
-				foreach ($book[$i] as $key => $value) {
-					if($book_name==$value)
-						$result="Found: [No.$i] $book_name ";
+		require_once "lib/nusoap.php";
+		$server= new nusoap_server();
+		$server->configureWSDL("BOOKSTORE","urn:book");
+		$server->wsdl->addComplexType("ArrayOfString", 
+						 "complexType", 
+						 "array", 
+						 "", 
+						 "SOAP-ENC:Array", 
+						 array(), 
+						 array(array("ref"=>"SOAP-ENC:arrayType","wsdl:arrayType"=>"xsd:string[]")), 
+						 "xsd:string"); 
+		$server->register("findBook",
+						array("keyword" => "xsd:string"),
+						array("return" =>  "tns:ArrayOfString")
+						);
+		function findBook($keyword){
+			$xml = simplexml_load_file('BookStore.xml');
+			$result = array();
+			foreach ($xml->book as $book) {
+				$category = (string) $book['category'];
+				$title = (String) $book->title;
+				$author = (String) $book->author;
+				$price = (int) $book->price;
+				$oper = substr($keyword, 0,1);
+				$KeyPrice = (int)substr($keyword, 1,strlen($keyword));
+				if($oper == '>' || $oper == '<'){
+					if($oper == '>'){
+						if($price >=  $KeyPrice){
+							array_push($result,$book['category'],$book->title,$book->author,$book->publisher,$book->publish_date,$book->price);
+						}
+					}elseif($oper == '<'){
+						if($price <=  $KeyPrice){
+							array_push($result,$book['category'],$book->title,$book->author,$book->publisher,$book->publish_date,$book->price);
+						}
+					}
+				}elseif(strncasecmp($category ,$keyword , strlen($keyword)) == 0 || (strncasecmp($title ,$keyword , strlen($keyword)) == 0) || (strncasecmp($author ,$keyword , strlen($keyword)) == 0)){
+					array_push($result,$book['category'],$book->title,$book->author,$book->publisher,$book->publish_date,$book->price);
 				}
-			}
-			return $result!="" ? $result : "'$book_name' is not found.";
+			}  
+			return $result;
 		}
-
 		// Register Add Function
 		$addVar = array(
 			'titleVar'=>'xsd:string',
@@ -74,7 +68,9 @@
 			$book->addChild('publish_date', $publish_dateVar);
 			$book->addChild('type', $typeVar);
 			$book->addChild('language',$languageVar);
-			$book->addChild('price',$priceVar);			
+			$book->addChild('price',$priceVar);
+			$book->addChild('thick',$thickVar);
+			$book->addChild('pricethai',$pricethaiVar);
 			$xml->asXML($file);	
 			
 			return "Add (name) <b>$titleVar</b> Success";
